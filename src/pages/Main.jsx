@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import MovieCard from "./MovieCard";
 
@@ -9,17 +9,30 @@ const FEATURED_API = `https://api.themoviedb.org/3/discover/movie?api_key=${API_
 const SEARCH_API = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=`;
 
 const Main = () => {
+  const next = useRef()
+  const prev = useRef()
+  const [page, setPage] = useState(1)
+const [totalPages, setTotalPages] = useState(1)
+const [pagesShown, setPagesShown] = useState([1,2,3])
 const currentUser = useContext(AuthContext)
 const [movies, setMovies] = useState([])
 const [searchTerm, setSearchTerm] = useState("")
 
 const getMovies=(API)=>{
-  axios.get(API).then(res=>setMovies(res.data.results))
+  axios.get(API+`&page=${page}`).then(res=>{
+    setTotalPages(res.data.total_pages)
+    console.log(totalPages)
+    setMovies(res.data.results)
+  })
+  
   .catch(err=>console.log(err))
+  
 }
 useEffect(() => {
-getMovies(FEATURED_API)
-}, [])
+getMovies(FEATURED_API+`&page=${page}`)
+//! pagination array oluşturma
+setPagesShown(Array.from({length:totalPages<5?totalPages:5},(_,i)=>i+page-2).filter(x=>x>0))
+}, [page])
 
 const handleSubmit =(e)=>{
 e.preventDefault();
@@ -33,7 +46,33 @@ if (searchTerm&&currentUser) {
 }
 }
 
-  return (<>
+const handlePage =(e)=>{
+  if (e.target.tagName==="BUTTON"){
+    switch (e.target.innerText) {
+      case "Previous":
+        setPage(page - 1)
+        console.log(page,e.target.innerText)
+        break;
+      case "Next":
+        setPage(+page + 1)
+        console.log(page,e.target.innerText)
+        break;
+      case "<<":
+        setPage(1)
+        console.log(page,e.target.innerText)
+        break;
+    
+      default:
+        setPage(+e.target.innerText)
+        console.log(page,e.target.innerText)
+        break;
+    }
+
+  }
+}
+
+
+  return (
 <>
 <form className="search" onSubmit={handleSubmit}>
         <input
@@ -53,7 +92,18 @@ if (searchTerm&&currentUser) {
 
 </div>
 
-</>
+
+
+<nav>
+  <ul className="pagination justify-content-center m-4" onClick={handlePage}>
+    <li className="page-item"><button className={`page-link btn ms-4 ${page<=1&&"disabled"}`}>{"<<"}</button></li>
+    <li className="page-item"><button className={`page-link btn ${page<=1&&"disabled"}`} ref={prev}>Previous</button></li>
+   {pagesShown.map((pageNum,i)=>(
+    <li className="page-item"><button type="button " className={`btn btn-primary ${pageNum===page&&"active"}`}>{pageNum}</button></li>
+   ))}
+    <li className="page-item"><button className="page-link ms-4 btn" ref={next}>Next</button></li>
+  </ul>
+</nav>
   </>);
 };
 
