@@ -9,10 +9,9 @@ const FEATURED_API = `https://api.themoviedb.org/3/discover/movie?api_key=${API_
 const SEARCH_API = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=`;
 
 const Main = () => {
-  const next = useRef()
-  const prev = useRef()
+
   const [page, setPage] = useState(1)
-const [totalPages, setTotalPages] = useState(1)
+const [totalPages, setTotalPages] = useState()
 const [pagesShown, setPagesShown] = useState([1,2,3])
 const currentUser = useContext(AuthContext)
 const [movies, setMovies] = useState([])
@@ -32,6 +31,7 @@ useEffect(() => {
 getMovies(FEATURED_API+`&page=${page}`)
 //! pagination array oluşturma
 setPagesShown(Array.from({length:totalPages<5?totalPages:5},(_,i)=>i+page-2).filter(x=>x>0))
+console.log(totalPages);
 }, [page])
 
 const handleSubmit =(e)=>{
@@ -97,11 +97,11 @@ const handlePage =(e)=>{
 <nav>
   <ul className="pagination justify-content-center m-4" onClick={handlePage}>
     <li className="page-item"><button className={`page-link btn ms-4 ${page<=1&&"disabled"}`}>{"<<"}</button></li>
-    <li className="page-item"><button className={`page-link btn ${page<=1&&"disabled"}`} ref={prev}>Previous</button></li>
+    <li className="page-item"><button className={`page-link btn ${page<=1&&"disabled"}`} >Previous</button></li>
    {pagesShown.map((pageNum,i)=>(
     <li className="page-item"><button type="button " className={`btn btn-primary ${pageNum===page&&"active"}`}>{pageNum}</button></li>
    ))}
-    <li className="page-item"><button className="page-link ms-4 btn" ref={next}>Next</button></li>
+    <li className="page-item"><button className="page-link ms-4 btn">Next</button></li>
   </ul>
 </nav>
   </>);
