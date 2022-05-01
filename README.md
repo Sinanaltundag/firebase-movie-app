@@ -10,4 +10,5 @@
 - Login function with firebase (email / with google)
 - Guests can't see movie details
 - Pagination
+- BootStrap 5
 
