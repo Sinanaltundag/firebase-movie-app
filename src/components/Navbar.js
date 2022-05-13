@@ -6,8 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
   const {currentUser} = useContext(AuthContext)
-  // const currentUser = { displayName: "sinan altundağ" };
-  // const currentUser = false
+
 const navigate= useNavigate()
 
 
@@ -15,7 +14,7 @@ const navigate= useNavigate()
     <div>
       <nav className="navbar navbar-expand-lg">
         <div className="container-fluid">
-          <Link to={"/"} className="navbar-brand text-white">
+          <Link to={"/"} className="navbar-brand text-white" >
             <h4>React Movie App</h4>
           </Link>
             <div className="d-flex text-white align-items-center">
