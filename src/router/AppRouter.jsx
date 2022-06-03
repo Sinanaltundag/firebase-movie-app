@@ -16,7 +16,6 @@ import Register from "../pages/Register";
 
 const AppRouter = () => {
   const { currentUser } = useContext(AuthContext);
-  console.log(currentUser)
   function PrivateRouter() {
     let location = useLocation();
     if (!currentUser) {

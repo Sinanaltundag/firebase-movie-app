@@ -9,6 +9,7 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import { toast } from "react-toastify";
 
 //* https://firebase.google.com/docs/auth/web/start
 //* https://console.firebase.google.com/ => project settings
@@ -48,7 +49,7 @@ export const createUser = async (email, password, displayName, navigate) => {
     navigate("/");
     console.log(userCredential);
   } catch (err) {
-    alert(err.message);
+    toast(err.message);
   }
 };
 
@@ -64,13 +65,13 @@ export const signIn = async (email, password, navigate) => {
     navigate("/");
     console.log(userCredential);
   } catch (err) {
-    alert(err.message);
+    toast(err.message);
   }
 };
 
 export const logOut = () => {
   signOut(auth);
-  alert("logged out successfully");
+  toast("Logged out successfully");
 };
 
 export const userObserver = (setCurrentUser) => {
