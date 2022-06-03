@@ -49,7 +49,7 @@ export const createUser = async (email, password, displayName, navigate) => {
     navigate("/");
     console.log(userCredential);
   } catch (err) {
-    toast(err.message);
+    toast.error(err.message);
   }
 };
 
@@ -63,15 +63,16 @@ export const signIn = async (email, password, navigate) => {
       password
     );
     navigate("/");
+    toast.success("Signed in successfully");
     console.log(userCredential);
   } catch (err) {
-    toast(err.message);
+    toast.error(err.message);
   }
 };
 
 export const logOut = () => {
   signOut(auth);
-  toast("Logged out successfully");
+  toast.success("Logged out successfully");
 };
 
 export const userObserver = (setCurrentUser) => {
@@ -95,8 +96,7 @@ export const signUpProvider=(navigate)=>{
     console.log(result)
     navigate("/")
   }).catch((error) => {
-    // Handle Errors here.
-console.log(error)
-    // ...
+    toast.error(error.message)
+
   });
 }

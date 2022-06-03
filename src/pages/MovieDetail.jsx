@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import YouTube from "react-youtube";
 
 
 
@@ -11,16 +12,21 @@ const [movieDetails, setMovieDetails] = useState()
   const {id}=useParams();
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
   // const API_KEY = "d6278b3dc3e6f8f8376a89851c3f8c8f";
-  const movieDetailBaseUrl = `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`;
-  const videoUrl = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}`;
+  const movieDetailBaseUrl = `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&append_to_response=videos`;
   const baseImageUrl = "https://image.tmdb.org/t/p/w1280";
   const defaultImage =
-    "https://images.unsplash.com/photo-1581905764498-f1b60bae941a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80";
-useEffect(() => {
-axios.get(movieDetailBaseUrl)
-.then(res=>setMovieDetails(res.data))
-.catch(err=>console.log(err))
-}, [])
+  "https://images.unsplash.com/photo-1581905764498-f1b60bae941a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80";
+  useEffect(() => {
+    axios.get(movieDetailBaseUrl)
+    .then(res=>setMovieDetails(res.data))
+    .catch(err=>console.log(err))
+  }, [])
+  
+  const opts = {
+    height: '300',
+    width: '400',
+    
+  };
 
 
 return (<div className="container py-5">
@@ -54,6 +60,7 @@ return (<div className="container py-5">
                 {"Total Vote : " + movieDetails?.vote_count}
               </li>
               <li className="list-group-item">
+            <YouTube videoId={movieDetails?.videos.results[0].key} opts={opts}/>
 <Link to={-1} className="card-link">
 Go Back
 </Link>

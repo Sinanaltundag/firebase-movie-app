@@ -9,7 +9,7 @@ const App = () => {
     <div>
       <AuthContextProvider>
         <AppRouter />
-        <ToastContainer />
+        <ToastContainer position="bottom-left" newestOnTop limit={2}/>
       </AuthContextProvider>
     </div>
   );
